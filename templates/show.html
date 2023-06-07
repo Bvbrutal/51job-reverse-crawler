@@ -1,0 +1,210 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <script type="text/javascript" src="../static/assets/pluging/show/js/jquery.js"></script>
+    <link rel="stylesheet" href="../static/assets/pluging/show/css/comon0.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/assets/img/favicon.ico">
+</head>
+<script>
+    $(window).load(function () {
+        $(".loading").fadeOut()
+    })
+
+    /****/
+    $(document).ready(function () {
+        var whei = $(window).width()
+        $("html").css({fontSize: whei / 20})
+        $(window).resize(function () {
+            var whei = $(window).width()
+            $("html").css({fontSize: whei / 20})
+        });
+    });
+</script>
+<script type="text/javascript" src="../static/assets/pluging/show/js/echarts.min.js"></script>
+<body>
+<div class="canvas" style="opacity: .2">
+    <iframe frameborder="0" src="../static/assets/pluging/show/js/index.html"
+            style="width: 100%; height: 100%"></iframe>
+</div>
+<div class="loading">
+    <div class="loadbox"><img src="../static/assets/pluging/show/picture/loading.gif"> 页面加载中...</div>
+</div>
+<div class="head">
+    <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparrent ">
+            <div class="main-header header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-2 col-lg-2 col-md-2">
+                            <div class="logo" style="float:left;">
+                                <a href="/index" style="padding-left: 30px"><img
+                                        src="../static/assets/img/logo/logo.png" alt=""></a>
+                            </div>
+                            <h1 style="padding-right: 100px"><a href="#"
+                                                                style="color: #0056b3">招聘信息可视化展示大屏</a></h1>
+                        </div>
+                        <div class="weather"><img
+                                src="../static/assets/pluging/show/picture/weather.png"
+                                alt=""><span>多云转小雨</span><span
+                                id="showTime"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <script>
+        var t = null;
+        t = setTimeout(time, 1000);//開始运行
+        function time() {
+            clearTimeout(t);//清除定时器
+            dt = new Date();
+            var y = dt.getFullYear();
+            var mt = dt.getMonth() + 1;
+            var day = dt.getDate();
+            var h = dt.getHours();//获取时
+            var m = dt.getMinutes();//获取分
+            var s = dt.getSeconds();//获取秒
+            document.getElementById("showTime").innerHTML = y + "年" + mt + "月" + day + "-" + h + "时" + m + "分" + s + "秒";
+            t = setTimeout(time, 1000); //设定定时器，循环运行
+        }
+
+    </script>
+</div>
+<main>
+    <section class="service-area services-padding">
+        <div class="mainbox">
+            <ul class="clearfix">
+                <li>
+                    <div class="boxall" style="height: 3.2rem">
+                        <div class="alltitle">企业资质</div>
+                        <div class="allnav" id="echart1"></div>
+                        <div class="boxfoot"></div>
+                    </div>
+                    <div class="boxall" style="height: 3.2rem">
+                        <div class="alltitle">招聘岗位top7</div>
+                        <div class="allnav" id="echart2"></div>
+                        <div class="boxfoot"></div>
+                    </div>
+                    <div class="boxall" style="height: 3.2rem">
+                        <div style="height:100%; width: 100%;">
+                            <div class="sy" id="fb1"></div>
+                            <div class="sy" id="fb2"></div>
+                            <div class="sy" id="fb3"></div>
+                        </div>
+                        <div class="boxfoot">
+
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="bar">
+                        <div class="barbox">
+                            <ul class="clearfix">
+                                <li class="pulll_left counter">{{ df.shape[0] }}</li>
+                                <li class="pulll_left counter" style="font-size: xx-large">{{ df2.index[0] }}</li>
+                            </ul>
+                        </div>
+                        <div class="barbox2">
+                            <ul class="clearfix">
+                                <li class="pulll_left">获取岗位条数</li>
+                                <li class="pulll_left">热门岗位名称</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="map">
+                        <div class="map1"><img src="../static/assets/pluging/show/picture/lbx.png" alt=""></div>
+                        <div class="map2"><img src="../static/assets/pluging/show/picture/jt.png" alt=""></div>
+                        <div class="map3"><img src="../static/assets/pluging/show/picture/map.png" alt=""></div>
+                        <div class="map4" id="map_1"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="boxall" style="height:3.4rem">
+                        <div class="alltitle">规模与薪资关系</div>
+                        <div class="allnav" id="echart4"></div>
+                        <div class="boxfoot"></div>
+                    </div>
+                    <div class="boxall" style="height: 3.2rem">
+                        <div class="alltitle">工作地区top7</div>
+                        <div class="allnav" id="echart5"></div>
+                        <div class="boxfoot"></div>
+                    </div>
+                    <div class="boxall" style="height: 3rem">
+                        <div class="alltitle">主要职业类比占比</div>
+                        <div class="allnav" id="echart6"></div>
+                        <div class="boxfoot"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="back"></div>
+    </section>
+</main>
+
+<script>
+    var data = [
+        {% for i in range(100) %}
+            {name: '{{df1.index[i]}}', value: {{df1[i]}}},
+        {% endfor %}
+    ];
+    var ec1_1 = [{% for i in range(7) %}
+        '{{df2.index[i]}}',
+    {% endfor %}];
+    var ec1_2 = [{% for i in range(7) %}
+        '{{df2[i]}}',
+    {% endfor %}];
+    var ec2_1 = [{% for i in range(7) %}
+        '{{df['地区'].value_counts().index[i]}}',
+    {% endfor %}];
+    var ec2_2 = [{% for i in range(7) %}
+        '{{df['地区'].value_counts()[i]}}',
+    {% endfor %}];
+    var ec5_1 = [{% for i in range(7) %}
+        '{{df['企业类别'].value_counts(sort=False).index[i]}}',
+    {% endfor %}];
+    var ec5_2 = [{% for i in range(7) %}
+        '{{df['企业类别'].value_counts(sort=False)[i]}}',
+    {% endfor %}];
+    var ec6_1 = [{% for i in range(8) %}
+        '{{df['职业类别'].value_counts().index[i]}}',
+    {% endfor %}];
+    var ec6_2 = [{% for i in range(8) %}
+        {{df['职业类别'].value_counts()[i]}},
+    {% endfor %}];
+    var ec31_1 = [{% for i in range(7) %}
+        '{{df['学历要求'].value_counts().index[i]}}',
+    {% endfor %}];
+    var ec31_2 = [{% for i in range(7) %}
+        {value: {{df['学历要求'].value_counts()[i]}}, name: '{{df['学历要求'].value_counts().index[i]}}'},
+    {% endfor %}];
+    var ec32_1 = [{% for i in range(3) %}
+        '{{df['招收对象'].value_counts().index[i]}}',
+    {% endfor %}];
+    var ec32_2 = [{% for i in range(3) %}
+        {value: {{df['招收对象'].value_counts()[i]}}, name: '{{df['招收对象'].value_counts().index[i]}}'},
+    {% endfor %}];
+    var ec33_1 = [{% for i in range(7) %}
+        '{{df['地区'].value_counts().index[i]}}',
+    {% endfor %}];
+    var ec33_2 = [{% for i in range(7) %}
+        {value: {{df['地区'].value_counts()[i]}}, name: '{{df['地区'].value_counts().index[i]}}'},
+    {% endfor %}];
+    var ec4_1 = [{% for i in range(12) %}
+        '{{df3.index[-12+i][5:]}}',
+    {% endfor %}];
+    var ec4_2 = [{% for i in range(12) %}
+        '{{df3[-12+i]}}',
+    {% endfor %}];
+    var ec4_3 = [{% for i in range(12) %}
+        '{{df4[-12+i]}}',
+    {% endfor %}];
+</script>
+<script language="JavaScript" src="../static/assets/pluging/show/js/js.js"></script>
+<script type="text/javascript" src="../static/assets/pluging/show/js/area_echarts.js"></script>
+<script type="text/javascript" src="../static/assets/pluging/show/js/china.js"></script>
+</body>
+</html>

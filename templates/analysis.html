@@ -1,0 +1,367 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <script src="../static/assets/js/echarts.js"></script>
+    <title>招聘信息可视化展示</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/assets/img/favicon.ico">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/assets/css/flaticon.css">
+    <link rel="stylesheet" href="../static/assets/css/slicknav.css">
+    <link rel="stylesheet" href="../static/assets/css/animate.min.css">
+    <link rel="stylesheet" href="../static/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="../static/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../static/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="../static/assets/css/slick.css">
+    <link rel="stylesheet" href="../static/assets/css/nice-select.css">
+    <link rel="stylesheet" href="../static/assets/css/style.css">
+    <link rel="stylesheet" href="../static/assets/css/responsive.css">
+    <style>
+        #zz {
+            width: 1340px;
+            height: 1280px;
+        }
+
+        #main1 {
+            width: 670px;
+            height: 640px;
+            float: left;
+            padding-bottom: 40px;
+        }
+
+        #main2 {
+            width: 670px;
+            height: 640px;
+            float: left;
+            padding-bottom: 40px;
+        }
+
+        #main3 {
+            padding-bottom: 40px;
+            width: 670px;
+            height: 640px;
+            float: left;
+        }
+
+        #main4 {
+            width: 670px;
+            height: 640px;
+            float: left;
+            padding-bottom: 40px;
+        }</style>
+</head>
+
+<body>
+<!-- Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img pere-text">
+                <img src="../static/assets/img/logo/logo.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Preloader Start -->
+
+<header>
+    <!-- Header Start -->
+    <div class="header-area header-transparrent ">
+        <div class="main-header header-sticky">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-xl-2 col-lg-2 col-md-2">
+                        <div class="logo">
+                            <a href="/index"><img src="../static/assets/img/logo/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10 col-md-10">
+                        <!-- Main-menu -->
+                        <div class="main-menu f-right d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <ul id="navigation">
+                                        <li><a href="/">主页</a></li>
+                                        <li><a href="/pythoninfo">招聘原数据</a></li>
+                                        <li class="active"><a href="/analysis">数据分析</a></li>
+                                        <li><a href="/wordcloud">词云</a></li>
+                                        <li><a href="/test">可视化大屏</a></li>
+                                    </ul>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
+
+<main>
+    <!-- Services Area Start -->
+    <section class="service-area services-padding" style="padding-top:100px">
+        <div class="container">
+            <div style="text-align: center;font-size: x-large;margin-bottom: 50px;">
+                <h2><a>据数据统计显示，{{df1.index[0]}}、{{df1.index[1]}}、{{df1.index[2]}}是就业最受欢迎的三座城市</a></h2>
+                <h2><a>平均月薪薪资集中在 {{ df4.index[0] }} 左右, 占比 {{ (df5[0]*100).round(2) }}%</a></h2>
+                <h2><a>就业企业资质选择{{df3.index[0]}}（占比{{ (df6[0]*100).round(2) }}%）、{{df3.index[1]}}（占比{{(df6[1]*100).round(2) }}%）的人数偏多</a></h2>
+                <h2><a>岗位对学历与工作经验的要求大部分是：{{"、".join(df2.index[0])}}（占比 {{ (df7[0]*100).round(2) }}%）</a></h2>
+            </div>
+            <!-- Section Tittle -->
+            <div id="zz">
+                <div id="main1"></div>
+                <div id="main2"></div>
+                <div id="main3"></div>
+                <div id="main4"></div>
+            </div>
+
+
+        </div>
+    </section>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main1'));
+        var option;
+
+        option = {
+            title: {
+                text: '城市招聘岗位数目top20',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {% for i in range(20) %}
+                            {value: {{df1[i]}}, name: '{{df1.index[i]}}：{{df1[i]}}'},
+                        {% endfor %}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+
+
+    </script>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main2');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '岗位对学历与工作经验的要求统计',
+                left: 'center',
+                top: 2,
+                textStyle: {
+                    color: 'black'
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [
+                {
+                    name: 'requests',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {% for i in range(df2.shape[0]) %}
+                            {
+                                value:{{ df2[i] }},
+                                name: '{{",".join(df2.index[i])}}'
+                            },
+                        {% endfor %}
+                    ]
+                }
+            ],
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            }
+        };
+
+        option && myChart.setOption(option);
+    </script>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main3');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '公司资质情况',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {% for i in range(df3.shape[0]) %}
+                            {value:{{ df3[i] }}, name: '{{df3.index[i]}}'},
+                        {% endfor %}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+
+
+    </script>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main4');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '薪资分布情况统计',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                name: '平均月薪(/元)',
+                nameLocation: 'center',
+                nameTextStyle: {
+                    padding: [20, 0, 0, 0]
+                },
+                data: {{ xdata|safe }}
+            },
+            yAxis: {
+                type: 'value',
+                name: '统计数量'
+            },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    width: 30
+                }
+            ],
+            series: [
+                {
+                    data: {{ ydata|safe }},
+                    {#data:{{yData}},#}
+                    type: 'bar',
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+    <!-- Shape -->
+    <div class="app-shape">
+        <img src="../static/assets/img/shape/app-shape-top.png" alt=""
+             class="app-shape-top heartbeat d-none d-lg-block">
+        <img src="../static/assets/img/shape/app-shape-left.png" alt="" class="app-shape-left d-none d-xl-block">
+        <!-- <img src="assets/img/shape/app-shape-right.png" alt="" class="app-shape-right bounce-animate "> -->
+    </div>
+
+</main>
+
+<!-- JS here -->
+
+<!-- All JS Custom Plugins Link Here here -->
+<script src="../static/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+
+<!-- Jquery, Popper, Bootstrap -->
+<script src="../static/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="../static/assets/js/popper.min.js"></script>
+<script src="../static/assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="../static/assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="../static/assets/js/owl.carousel.min.js"></script>
+<script src="../static/assets/js/slick.min.js"></script>
+<!-- Date Picker -->
+<script src="../static/assets/js/gijgo.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="../static/assets/js/wow.min.js"></script>
+<script src="../static/assets/js/animated.headline.js"></script>
+<script src="../static/assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Scrollup, nice-select, sticky -->
+<script src="../static/assets/js/jquery.scrollUp.min.js"></script>
+<script src="../static/assets/js/jquery.nice-select.min.js"></script>
+<script src="../static/assets/js/jquery.sticky.js"></script>
+
+<!-- contact js -->
+<script src="../static/assets/js/contact.js"></script>
+<script src="../static/assets/js/jquery.form.js"></script>
+<script src="../static/assets/js/jquery.validate.min.js"></script>
+<script src="../static/assets/js/mail-script.js"></script>
+<script src="../static/assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->
+<script src="../static/assets/js/plugins.js"></script>
+<script src="../static/assets/js/main.js"></script>
+
+</body>
+</html>
