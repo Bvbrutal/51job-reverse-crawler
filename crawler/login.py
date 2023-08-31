@@ -33,7 +33,7 @@ def login(url):
 def save_pic(obj, name):
     try:
         time.sleep(1)
-        pic_url = web.save_screenshot(f'static/51job{name}.png')
+        pic_url = web.save_screenshot(f'static/img/51job{name}.png')
         print("%s:截图成功!" % pic_url)
 
         # 获取元素位置信息//是否乘1.25与电脑屏幕分辨率有关。
@@ -49,9 +49,9 @@ def save_pic(obj, name):
         print('Bottom %s' % bottom)
         print('')
 
-        im = Image.open(f'static/51job{name}.png')
+        im = Image.open(f'static/img/51job{name}.png')
         im = im.crop((left, top, right, bottom))  # 元素裁剪
-        file_name = 'static/51job_' + name + '.png'
+        file_name = 'static/img/51job_' + name + '.png'
         im.save(file_name)  # 元素截图
     except BaseException as msg:
         print("%s:截图失败!" % msg)
@@ -133,7 +133,7 @@ def get_distance(bg_image, fullbg_image):
 
 # 破解滑块验证
 def slide():
-    distance = get_distance(Image.open('static/51job_back.png'), Image.open('static/51job_full.png'))-5  # 要将原图与实际图对比的系数除掉
+    distance = get_distance(Image.open('static/img/51job_back.png'), Image.open('static/img/51job_full.png'))-5  # 要将原图与实际图对比的系数除掉
     try:
         slider = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.geetest_slider_button')))  # 找到滑块
         if slider:
