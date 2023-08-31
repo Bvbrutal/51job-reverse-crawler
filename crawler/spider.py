@@ -192,7 +192,7 @@ class wuyou():
             if m==0:
                 break
         df = pd.DataFrame(datas)
-        df.to_csv('static/data.csv',mode='a', index=False, header=False,encoding='utf-8-sig')
+        df.to_csv('static/data_undeal.csv',mode='a', index=False, header=False,encoding='utf-8-sig')
 
 if __name__ == '__main__':
     wy = wuyou()  # 实例化
