@@ -4,7 +4,7 @@ import pandas as pd
 def mysql_init(sql):
     db = pymysql.connect(host='127.0.0.1',
                          user='root',
-                         password='123456',
+                         password='11223344q',
                          database='51job')
     cursor = db.cursor()
     cursor.execute(sql)
@@ -25,7 +25,7 @@ def data_to_mysql():
     df=pd.read_csv('static/data.csv', header=None)
     db = pymysql.connect(host='127.0.0.1',
                          user='root',
-                         password='123456',
+                         password='11223344q',
                          database='51job')
     sql_del = '''delete from jobdata'''
     cursor = db.cursor()
