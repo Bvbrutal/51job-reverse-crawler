@@ -1,3 +1,5 @@
+import configparser
+
 from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
@@ -17,12 +19,16 @@ wait = WebDriverWait(web, 100)
 
 # 登录
 def login(url):
+    cfp = configparser.RawConfigParser()
+    cfp.read('config.ini', encoding='utf-8')
+    phonenumber = cfp.get('personal', 'phonenumber')
+    password=cfp.get('personal', 'password')
     web.get(url)
     web.maximize_window()  # 窗口最大化
     time.sleep(2)
     # 登录
-    web.find_element(By.ID, 'loginname').send_keys('18875370169')
-    web.find_element(By.ID, 'password').send_keys('zxcvbnm123')
+    web.find_element(By.ID, 'loginname').send_keys(phonenumber)
+    web.find_element(By.ID, 'password').send_keys(password)
     web.find_element(By.ID, 'isread_em').click()
     time.sleep(0.2)
     web.find_element(By.ID, 'login_btn_withPwd').click()
@@ -154,12 +160,12 @@ def slide():
     except Exception as e:
         print("===" + str(e))
 
-def loin():
-    url = 'https://login.51job.com/login.php?loginway=0&isjump=0&lang=c&from_domain=i&url=http%3A%2F%2Fwww.51job.com%2F'
+def loin(url):
     login(url)
     cut()
     slide()
     web.close()
 
 if __name__ == '__main__':
-    loin()
+    url = 'https://login.51job.com/login.php?loginway=0&isjump=0&lang=c&from_domain=i&url=http%3A%2F%2Fwww.51job.com%2F'
+    loin(url)
