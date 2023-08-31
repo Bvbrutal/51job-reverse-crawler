@@ -1,14 +1,16 @@
 import pandas as pd
 from flask import Flask, render_template
 import pymysql
+from crawler.get_information import get_information
 
+mysql_password,mysql_root=get_information()
 
 app = Flask(__name__)
 
 def get_data():
     sql_cmd = "SELECT * FROM jobdata"
     # 用DBAPI构建数据库链接engine
-    con = pymysql.connect(host='127.0.0.1', user='root', password='123456', database='51job', charset='utf8',
+    con = pymysql.connect(host='127.0.0.1', user=mysql_root, password=mysql_password, database='51job', charset='utf8',
                           use_unicode=True)
     df = pd.read_sql(sql_cmd, con)
     return df
