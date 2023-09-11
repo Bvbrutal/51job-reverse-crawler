@@ -3,12 +3,12 @@ import pandas as pd
 
 from crawler.get_information import get_information, get_setting
 
-mysql_password,mysql_root=get_information()
+mysql_password,mysql_root,host_ip=get_information()
 reget_data=get_setting()
 
 
 def mysql_init(sql):
-    db = pymysql.connect(host='127.0.0.1',
+    db = pymysql.connect(host=host_ip,
                          user=mysql_root,
                          password=mysql_password,
                          database='51job')
@@ -19,7 +19,7 @@ def mysql_init(sql):
 
 
 def mysql_db_init():
-    db = pymysql.connect(host='127.0.0.1',
+    db = pymysql.connect(host=host_ip,
                          user=mysql_root,
                          password=mysql_password)
     # 指定要创建的数据库名
@@ -36,12 +36,12 @@ def mysql_db_init():
 
 def data_to_mysql():
     sql1 = '''create table IF NOT EXISTS jobdata (公司全称 varchar(255),岗位名称 varchar(255),地区 varchar(255),薪资 varchar(255),学历要求 varchar(255),职业类别 varchar(255),招收对象 varchar(255),企业类别 varchar(255),关键字 varchar(255),更新时间 varchar(255))'''
-    mysql_db_init()
+    # mysql_db_init()
     # sql2 = '''DROP TABLE IF EXISTS jobdata;'''
     # mysql_init(sql2)
     mysql_init(sql1)
     df=pd.read_csv('static/data.csv', header=None)
-    db = pymysql.connect(host='127.0.0.1',
+    db = pymysql.connect(host=host_ip,
                          user=mysql_root,
                          password=mysql_password,
                          database='51job')

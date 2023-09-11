@@ -78,7 +78,7 @@ def data_deal():
         except:
             continue
     # nan字段填充
-    # df[6]=pd.to_numeric(df[6], errors='coerce')#万能去除法，强制转换
+    df[6]=pd.to_numeric(df[6], errors='coerce')#万能去除法，强制转换
     df[6].fillna(df[6].mean(), inplace=True)
     df[2].fillna('无需学历', inplace=True)
     df[3].fillna('其他', inplace=True)

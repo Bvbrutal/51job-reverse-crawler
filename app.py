@@ -1,20 +1,30 @@
 import pandas as pd
 from flask import Flask, render_template
 import pymysql
-from crawler.get_information import get_information
+from crawler.get_information import get_information, get_setting
 
-mysql_password,mysql_root=get_information()
+mysql_password,mysql_root,host_ip=get_information()
 
 app = Flask(__name__)
+@app.before_first_request
+def load_data():
+    global data_all
+    global data_show
+    sql_cmd_all = "SELECT * FROM jobdata"
+    sql_cmd_show = "SELECT * FROM jobdata LIMIT 100"
+
+    con = pymysql.connect(host=host_ip, user=mysql_root, password=mysql_password, database='51job', charset='utf8',
+                          use_unicode=True)
+
+    data_all = pd.read_sql(sql_cmd_all, con)
+    data_show = pd.read_sql(sql_cmd_show, con)
+
+    con.close()
 
 def get_data():
-    sql_cmd = "SELECT * FROM jobdata"
-    # 用DBAPI构建数据库链接engine
-    con = pymysql.connect(host='127.0.0.1', user=mysql_root, password=mysql_password, database='51job', charset='utf8',
-                          use_unicode=True)
-    df = pd.read_sql(sql_cmd, con)
-    return df
-
+    return data_all
+def get_data_show():
+    return data_show
 @app.route('/')
 def main():
     return render_template("index.html")
@@ -25,7 +35,7 @@ def index():
 
 @app.route('/pythoninfo')
 def pythoninfo():
-    df=get_data()
+    df=get_data_show()
     return render_template('pythoninfo.html',data=df)
 
 
