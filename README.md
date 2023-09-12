@@ -14,6 +14,8 @@
 
 # 效果展示⌛
 
+示例地址：http://51job.pshxx.cc/pythoninfo
+
 ----
 
 1. web展示
