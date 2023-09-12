@@ -6,20 +6,26 @@ from crawler.get_information import get_information, get_setting
 mysql_password,mysql_root,host_ip=get_information()
 
 app = Flask(__name__)
+from sqlalchemy import create_engine
+
 @app.before_first_request
 def load_data():
     global data_all
     global data_show
     sql_cmd_all = "SELECT * FROM jobdata"
     sql_cmd_show = "SELECT * FROM jobdata LIMIT 100"
+    # 创建Engine连接MySQL数据库
+    # url = f"mysql+mysqldb://{mysql_root}:{mysql_password}@{host_ip}:3306/sqlalchemy?charset=utf8"
+    # engine = create_engine(url=url, echo=True, future=True)
 
-    con = pymysql.connect(host=host_ip, user=mysql_root, password=mysql_password, database='51job', charset='utf8',
+    engine = pymysql.connect(host=host_ip, user=mysql_root, password=mysql_password, database='51job', charset='utf8',
                           use_unicode=True)
 
-    data_all = pd.read_sql(sql_cmd_all, con)
-    data_show = pd.read_sql(sql_cmd_show, con)
+    data_all = pd.read_sql(sql_cmd_all, engine)
+    data_show = pd.read_sql(sql_cmd_show, engine)
+    engine.close()
 
-    con.close()
+
 
 def get_data():
     return data_all
@@ -45,7 +51,7 @@ def analysis():
     df = get_data()
     df1=df['地区'].value_counts()
     #data2
-    df2=df[{'学历要求','招收对象'}].value_counts()
+    df2=df[['学历要求','招收对象']].value_counts()
     # data3
     df3=df['企业类别'].value_counts()
     #data4
@@ -58,7 +64,7 @@ def analysis():
     #data5
     df5 = df[['薪资']].value_counts().apply(lambda x :x/df.shape[0])
     df6=df['企业类别'].value_counts().apply(lambda x: x / df.shape[0])
-    df7=df[{'学历要求','招收对象'}].value_counts().apply(lambda x: x / df.shape[0])
+    df7=df[['学历要求','招收对象']].value_counts().apply(lambda x: x / df.shape[0])
     return render_template('analysis.html', df1=df1,df2=df2 ,df3=df3,xdata=xdata,ydata=ydata,df4=df4,df5=df5,df6=df6,df7=df7)
 
 
@@ -77,5 +83,6 @@ def show():
     return render_template('show.html',df=df,df1=df1,df2=df2,df3=df3,df4=df4)
 
 
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=5000)

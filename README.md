@@ -14,13 +14,13 @@
 
 # 效果展示⌛
 
-示例地址：http://51job.pshxx.cc/pythoninfo
+示例地址：http://51job.pshxx.cc
 
 ----
 
 1. web展示
 ![爬取过程图](static/img/img_1.png)
-![img.png](static/img/img_2.png)
+![img.png](static/img/img_5.png)
 ![img_1.png](static/img/img_3.png)
 
 
@@ -57,10 +57,16 @@ python crawler.py
 
 ------
 
+## 本地
+
 ```
 python app.py
 ```
 or
 ```
 flask run
+```
+## docker
+```
+docker build -t my-python-app . && docker run -d -p 5000:5000 my-python-app
 ```
