@@ -173,7 +173,7 @@
         '{{df['职业类别'].value_counts().index[i]}}',
     {% endfor %}];
     var ec6_2 = [{% for i in range(8) %}
-        {{df['职业类别'].value_counts()[i]}},
+        '{{df['职业类别'].value_counts()[i]}}',
     {% endfor %}];
     var ec31_1 = [{% for i in range(7) %}
         '{{df['学历要求'].value_counts().index[i]}}',
